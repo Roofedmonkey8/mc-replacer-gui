@@ -28,4 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mc-replacer-windows
-          path: dist/replacer.exe
+          path: dist/Custom.exe
