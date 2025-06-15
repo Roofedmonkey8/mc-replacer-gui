@@ -1,4 +1,4 @@
-name: Build Windows Executable
+name: Build App for Windows and Linux
 
 on:
   push:
@@ -21,11 +21,37 @@ jobs:
         run: |
           pip install pyinstaller customtkinter pyperclip
 
-      - name: Build with PyInstaller
-        run: pyinstaller --onefile --noconsole Custom.py
+      - name: Build Windows Executable
+        run: pyinstaller --onefile --noconsole --icon=MineCraft.ico mc_replacer.py
 
-      - name: Upload executable
+      - name: Upload Windows Executable
         uses: actions/upload-artifact@v4
         with:
           name: mc-replacer-windows
-          path: dist/Custom.exe
+          path: dist/mc_replacer.exe
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libnss3
+          pip install pyinstaller customtkinter pyperclip
+
+      - name: Build Linux Executable
+        run: pyinstaller --onefile --noconsole --icon=MineCraft.ico mc_replacer.py
+
+      - name: Upload Linux Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: mc-replacer-linux
+          path: dist/mc_replacer
