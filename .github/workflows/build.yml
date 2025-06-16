@@ -1,4 +1,4 @@
-name: Build App for Windows and Linux
+name: Build Executables
 
 on:
   push:
@@ -6,52 +6,54 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install dependencies
-        run: |
-          pip install pyinstaller customtkinter pyperclip
-
-      - name: Build Windows Executable
-        run: pyinstaller --onefile --noconsole --icon=MineCraft.ico mc_replacer.py
-
-      - name: Upload Windows Executable
-        uses: actions/upload-artifact@v4
-        with:
-          name: mc-replacer-windows
-          path: dist/mc_replacer.exe
-
   build-linux:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.10'
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libx11-dev libnss3
-          pip install pyinstaller customtkinter pyperclip
+          python -m pip install --upgrade pip
+          pip install pyinstaller PySide6
 
-      - name: Build Linux Executable
-        run: pyinstaller --onefile --noconsole --icon=MineCraft.ico mc_replacer.py
+      - name: Build executable (Linux)
+        run: |
+          pyinstaller mc_replacer.py --noconfirm --icon=MineCraft.ico --onefile --name mc-replacer-linux
 
-      - name: Upload Linux Executable
+      - name: Upload Linux binary
         uses: actions/upload-artifact@v4
         with:
           name: mc-replacer-linux
-          path: dist/mc_replacer
+          path: dist/mc-replacer-linux
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller PySide6
+
+      - name: Build executable (Windows)
+        run: |
+          pyinstaller mc_replacer.py --noconfirm --icon=MineCraft.ico --onefile --name mc-replacer-win.exe
+
+      - name: Upload Windows binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: mc-replacer-win
+          path: dist/mc-replacer-win.exe
