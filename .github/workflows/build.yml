@@ -23,13 +23,8 @@ jobs:
           pip install pyinstaller PySide6 rapidfuzz pyperclip
 
       - name: Build executable (Linux)
-        run: |
-          pyinstaller mc_replacer.py \
-            --noconfirm \
-            --onefile \
-            --name mc-replacer-linux \
-            --add-data "blocks.json:." \
-            --add-data "icons:icons"
+        run: pyinstaller mc_replacer.py --noconfirm --onefile --name mc-replacer-linux --add-data "blocks.json:." --add-data "icons/blocks:icons/blocks"
+
 
       - name: Upload Linux binary
         uses: actions/upload-artifact@v4
@@ -54,13 +49,8 @@ jobs:
           pip install pyinstaller PySide6 rapidfuzz pyperclip
 
       - name: Build executable (Windows)
-        run: |
-          pyinstaller mc_replacer.py ^
-            --noconfirm ^
-            --onefile ^
-            --name mc-replacer-win.exe ^
-            --add-data "blocks.json;." ^
-            --add-data "icons;icons"
+        run: pyinstaller mc_replacer.py --noconfirm --onefile --name mc-replacer-win.exe --add-data "blocks.json;." --add-data "icons/blocks;icons/blocks"
+
 
       - name: Upload Windows binary
         uses: actions/upload-artifact@v4
