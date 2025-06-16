@@ -24,7 +24,12 @@ jobs:
 
       - name: Build executable (Linux)
         run: |
-          pyinstaller mc_replacer.py --noconfirm --icon=MineCraft.ico --onefile --name mc-replacer-linux
+          pyinstaller mc_replacer.py \
+            --noconfirm \
+            --onefile \
+            --name mc-replacer-linux \
+            --add-data "blocks.json:." \
+            --add-data "icons:icons"
 
       - name: Upload Linux binary
         uses: actions/upload-artifact@v4
@@ -50,7 +55,12 @@ jobs:
 
       - name: Build executable (Windows)
         run: |
-          pyinstaller mc_replacer.py --noconfirm --icon=MineCraft.ico --onefile --name mc-replacer-win.exe
+          pyinstaller mc_replacer.py ^
+            --noconfirm ^
+            --onefile ^
+            --name mc-replacer-win.exe ^
+            --add-data "blocks.json;." ^
+            --add-data "icons;icons"
 
       - name: Upload Windows binary
         uses: actions/upload-artifact@v4

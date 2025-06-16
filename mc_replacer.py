@@ -13,6 +13,13 @@ import json
 import os
 import sys
 
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and PyInstaller."""
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+
 def to_readable(name):
     return name.replace("_", " ").title()
 
@@ -144,7 +151,7 @@ class ReplaceCommandApp(QWidget):
 
     def load_blocks(self):
         try:
-            with open("blocks.json", "r") as f:
+            with open(resource_path("blocks.json"), "r") as f:
                 raw = json.load(f)
                 self.blocks = {}
 
@@ -161,7 +168,7 @@ class ReplaceCommandApp(QWidget):
                 readable_blocks = []
                 for block in self.blocks:
                     readable = to_readable(block)
-                    icon_path = f"icons/blocks/{block}.png"
+                    icon_path = resource_path(f"icons/blocks/{block}.png")
                     icon = QIcon(icon_path) if self.show_icons and os.path.exists(icon_path) else QIcon("icon.png")
                     self.base_block_menu.addItem(icon, readable, userData=block)
                     readable_blocks.append(readable)
@@ -252,7 +259,7 @@ class ReplaceCommandApp(QWidget):
 
             for block in self.filtered_blocks:
                 readable = to_readable(block)
-                icon_path = f"icons/blocks/{block}.png"
+                icon_path = resource_path(f"icons/blocks/{block}.png")
                 icon = QIcon(icon_path) if self.show_icons and os.path.exists(icon_path) else QIcon("icon.png")
                 combo.addItem(icon, readable, userData=block)
 
