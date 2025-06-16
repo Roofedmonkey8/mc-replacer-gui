@@ -19,6 +19,21 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
+def get_writable_block_file():
+    """Get user-writable blocks.json path. Copies it if not present."""
+    config_dir = os.path.join(os.path.expanduser("~"), ".mc-replacer")
+    os.makedirs(config_dir, exist_ok=True)
+
+    writable_path = os.path.join(config_dir, "blocks.json")
+    if not os.path.exists(writable_path):
+        # Copy bundled blocks.json if missing
+        try:
+            bundled_path = resource_path("blocks.json")
+            with open(bundled_path, "r") as src, open(writable_path, "w") as dst:
+                dst.write(src.read())
+        except Exception as e:
+            print(f"Warning: Could not copy default blocks.json: {e}")
+    return writable_path
 
 def to_readable(name):
     return name.replace("_", " ").title()
@@ -151,7 +166,7 @@ class ReplaceCommandApp(QWidget):
 
     def load_blocks(self):
         try:
-            with open(resource_path("blocks.json"), "r") as f:
+            with open(get_writable_block_file(), "r") as f:
                 raw = json.load(f)
                 self.blocks = {}
 
@@ -450,7 +465,7 @@ class BlockEditorDialog(QDialog):
         super().__init__()
         self.setWindowTitle("Block Data Viewer/Editor")
         self.setMinimumSize(700, 500)
-        self.block_file = block_file
+        self.block_file = get_writable_block_file()
         self.original_data = {}
         self.current_data = {}
 
