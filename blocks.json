@@ -1,0 +1,26 @@
+{
+  "white_concrete": {},
+  "mossy_cobblestone_stairs": {
+    "facing": [
+      "north",
+      "east",
+      "south",
+      "west"
+    ],
+    "half": [
+      "bottom",
+      "top"
+    ],
+    "shape": [
+      "inner_left",
+      "inner_right",
+      "outer_left",
+      "outer_right",
+      "straight"
+    ],
+    "waterlogged": [
+      "true",
+      "false"
+    ]
+  }
+}
